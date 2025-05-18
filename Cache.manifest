@@ -11,6 +11,7 @@ about.html
 payload.js
 payload.bin
 psfree.mjs
+style.css
 send.mjs
 fonts/LiberationMono-Regular.ttf
 kpatch/900.elf
