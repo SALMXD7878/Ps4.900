@@ -2,9 +2,9 @@ CACHE MANIFEST
 # SALMXD cache: 2025-05-19
 
 CACHE:
+cache.html
 index.html
-lapse.
-mjscache.html
+lapse.mjs
 config.mjs
 alert.mjs
 about.html
