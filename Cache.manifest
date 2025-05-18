@@ -3,7 +3,8 @@ CACHE MANIFEST
 
 CACHE:
 index.html
-lapse.mjs
+lapse.
+mjscache.html
 config.mjs
 alert.mjs
 about.html
