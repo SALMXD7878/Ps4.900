@@ -136,11 +136,11 @@ const main_core = 7;
 const num_grooms = 0x200;
 const num_handles = 0x100;
 const num_sds = 0x100; // max is 0x100 due to max IPV6_TCLASS
-const num_alias = 100; //TODO: check best value here for 9.xx
-const num_races = 200;
+const num_alias = 50; //TODO: check best value here for 9.xx
+const num_races = 100;
 const leak_len = 16;
 const num_leaks = 5;
-const num_clobbers = 12;
+const num_clobbers = 8;
 
 let chain = null;
 async function init() {
