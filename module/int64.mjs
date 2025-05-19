@@ -15,39 +15,45 @@ GNU Affero General Public License for more details.
 You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
+// cache some constants
 const isInteger = Number.isInteger;
 
 function check_not_in_range(x) {
     return !(isInteger(x) && -0x80000000 <= x && x <= 0xffffffff);
 }
 
+// use this if you want to support objects convertible to Int but only need
+// their low/high bits. creating a Int is slower compared to just using this
+// function
 export function lohi_from_one(low) {
     if (low instanceof Int) {
         return low._u32.slice();
     }
 
-    if (typeof low !== 'number' || check_not_in_range(low)) {
-        throw TypeError(`Expected 32-bit integer or Int instance, got: ${typeof low}, value: ${low}`);
+    if (check_not_in_range(low)) {
+        throw TypeError(`low not a 32-bit integer: ${low}`);
     }
 
     return [low >>> 0, low < 0 ? -1 >>> 0 : 0];
 }
 
+// immutable 64-bit integer
 export class Int {
     constructor(low, high) {
         if (high === undefined) {
             this._u32 = new Uint32Array(lohi_from_one(low));
-        } else {
-            if (check_not_in_range(low)) {
-                throw TypeError(`low not a 32-bit integer: ${low}`);
-            }
-            if (check_not_in_range(high)) {
-                throw TypeError(`high not a 32-bit integer: ${high}`);
-            }
-            this._u32 = new Uint32Array([low, high]);
+            return;
         }
 
-        Object.freeze(this._u32);
+        if (check_not_in_range(low)) {
+            throw TypeError(`low not a 32-bit integer: ${low}`);
+        }
+
+        if (check_not_in_range(high)) {
+            throw TypeError(`high not a 32-bit integer: ${high}`);
+        }
+
+        this._u32 = new Uint32Array([low, high]);
     }
 
     get lo() {
@@ -57,6 +63,8 @@ export class Int {
     get hi() {
         return this._u32[1];
     }
+
+    // return low/high as signed integers
 
     get bot() {
         return this._u32[0] | 0;
@@ -69,10 +77,9 @@ export class Int {
     neg() {
         const u32 = this._u32;
         const low = (~u32[0] >>> 0) + 1;
-        const carry = low > 0xffffffff ? 1 : 0;
         return new this.constructor(
             low >>> 0,
-            ((~u32[1] >>> 0) + carry) >>> 0,
+            ((~u32[1] >>> 0) + (low > 0xffffffff)) >>> 0,
         );
     }
 
@@ -93,10 +100,9 @@ export class Int {
         const values = lohi_from_one(b);
         const u32 = this._u32;
         const low = u32[0] + values[0];
-        const carry = low > 0xffffffff ? 1 : 0;
         return new this.constructor(
             low >>> 0,
-            (u32[1] + values[1] + carry) >>> 0,
+            (u32[1] + values[1] + (low > 0xffffffff)) >>> 0,
         );
     }
 
@@ -104,10 +110,9 @@ export class Int {
         const values = lohi_from_one(b);
         const u32 = this._u32;
         const low = u32[0] + (~values[0] >>> 0) + 1;
-        const carry = low > 0xffffffff ? 1 : 0;
         return new this.constructor(
             low >>> 0,
-            (u32[1] + (~values[1] >>> 0) + carry) >>> 0,
+            (u32[1] + (~values[1] >>> 0) + (low > 0xffffffff)) >>> 0,
         );
     }
 
