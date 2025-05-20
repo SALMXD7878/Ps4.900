@@ -4,8 +4,6 @@ CACHE MANIFEST
 CACHE:
 index.html
 about.html
-style.css
-img.jpg
 payload.js
 payload.bin
 alert.mjs
