@@ -1,112 +1,78 @@
-@font-face {
-    font-family: 'Arabic';
-    src: url('fonts/Tajawal-Regular.ttf');
-    font-weight: normal;
-    font-style: normal;
-}
-
 html {
-    background-image: url("img.jpg");
-    background-size: cover;
+    background-image: url("img.jpg"); /* العودة إلى الصورة الأصلية jpg */
     background-position: center;
-    background-repeat: no-repeat;
+    background-size: cover;
     background-attachment: fixed;
-    direction: rtl;
-    font-family: 'Arabic', sans-serif;
+    background-repeat: no-repeat;
+    background-color: #24272b;
     color: white;
     text-align: center;
     overflow: hidden;
-}
-
-body {
-    margin: 0;
-    padding: 20px;
-    min-height: 100vh;
-    background-color: rgba(0, 0, 0, 0.6);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    direction: rtl; /* إضافة اتجاه النص من اليمين لليسار */
 }
 
 h1 {
-    font-size: 36px;
-    color: #00ff99;
-    text-shadow: 0 0 10px #00ff99;
-    margin-bottom: 20px;
-}
-
-#status_msg {
-    font-size: 28px;
-    color: #ffff00;
-    margin-top: 30px;
-    animation: glow 2s infinite;
-    text-shadow: 0 0 5px #ffff00, 0 0 10px #ffff00;
-}
-
-@keyframes glow {
-    0% { text-shadow: 0 0 5px #ffff00; }
-    50% { text-shadow: 0 0 20px #ffff00, 0 0 30px #ffff00; }
-    100% { text-shadow: 0 0 5px #ffff00; }
-}
-
-#console {
-    background-color: rgba(0, 0, 0, 0.7);
-    border-radius: 10px;
-    padding: 15px;
-    margin-top: 20px;
-    width: 90%;
-    max-width: 800px;
-    max-height: 200px;
-    overflow-y: auto;
-    font-family: 'Courier New', monospace;
-    font-size: 14px;
-    line-height: 1.5;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
+    text-shadow: 0.1em 0.1em 0.2em black;
+    font-size: 25px;
+    color: white;
+    font-family: Arial, sans-serif; /* تحسين الخط */
 }
 
 a {
-    color: #00ffff;
     text-decoration: none;
 }
 
-a:hover {
-    color: #00ff00;
-    text-shadow: 0 0 8px #00ff00;
+#progress {
+    display: block;
+}
+
+#lnx {
+    display: none;
+}
+
+#mods {
+    display: none;
 }
 
 .btn {
-    background: linear-gradient(to bottom, #007700, #005500);
+    background-color: #008000;
     color: white;
-    padding: 12px 30px;
+    width: 227px;
+    height: 46px;
+    padding-bottom: 5px;
+    text-align: center;
     font-size: 20px;
-    border: none;
-    border-radius: 10px;
+    margin-top: 8px;
+    margin-bottom: 8px;
+    margin-left: 5px;
+    margin-right: 5px;
+    border-style: none;
+    transition-duration: 0.4s;
     cursor: pointer;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
-    transition: all 0.3s ease;
-    margin: 10px;
-    font-family: 'Arabic', sans-serif;
+    border-radius: 4px;
+    font-family: Arial, sans-serif; /* تحسين الخط */
 }
 
 .btn:hover {
-    background: linear-gradient(to bottom, #0069d9, #004499);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
+    background-color: #0069d9;
 }
 
-@media (max-width: 768px) {
-    h1 {
-        font-size: 26px;
-    }
+.btn-onln {
+    background-color: #076300;
+}
 
-    #status_msg {
-        font-size: 22px;
-    }
+.btn-onln:hover {
+    background-color: #18891b;
+}
 
-    .btn {
-        width: 200px;
-        font-size: 18px;
-    }
+.btn-toolbox {
+    background-color: #ae2301;
+}
+
+.btn-toolbox:hover {
+    background-color: #d42a01;
+}
+
+#console {
+    font-family: "logging";
 }
