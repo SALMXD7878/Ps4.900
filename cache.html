@@ -1,141 +1,85 @@
 <!DOCTYPE html>
 <html manifest="cache.manifest" lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PSFree 9.00 | التخزين المؤقت - SALMXD</title>
-<link rel="stylesheet" href="style.css">
-<style>
+  <meta charset="UTF-8">
+  <title>تثبيت التخزين المؤقت - PSFree</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
     body {
-        font-family: 'logging', sans-serif;
-        background-color: #000;
-        color: #fff;
-        margin: 0;
-        padding: 0;
-        text-align: center;
-        direction: rtl;
-    }
-
-    .container {
-        max-width: 800px;
-        margin: 0 auto;
-        padding: 30px;
-    }
-
-    h1, h2 {
-        color: #00a8ff;
+      background: url('img.jpg') no-repeat center center fixed;
+      background-size: cover;
+      color: white;
+      font-family: sans-serif;
+      text-align: center;
+      padding: 20px;
+      direction: rtl;
     }
 
     .progress-bar {
-        width: 100%;
-        height: 25px;
-        background-color: rgba(255, 255, 255, 0.1);
-        border-radius: 15px;
-        overflow: hidden;
-        margin: 30px auto;
-        border: 1px solid rgba(255,255,255,0.2);
+      width: 100%;
+      max-width: 600px;
+      height: 25px;
+      margin: 30px auto;
+      background-color: rgba(255,255,255,0.1);
+      border-radius: 15px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.2);
     }
 
     .progress-fill {
-        height: 100%;
-        width: 0%;
-        background: linear-gradient(90deg, #00a8ff, #00ff00);
-        border-radius: 15px;
-        transition: width 0.5s ease;
-        position: relative;
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #00a8ff, #00ff00);
+      transition: width 0.5s ease;
     }
 
-    .progress-fill::after {
-        content: '';
-        position: absolute;
-        top: 0; left: 0;
-        width: 100%; height: 100%;
-        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-        animation: shine 1.5s infinite;
-    }
-
-    @keyframes shine {
-        0% { transform: translateX(-100%); }
-        100% { transform: translateX(100%); }
-    }
-
-    #status {
-        margin-top: 20px;
-        font-size: 20px;
+    .status {
+      margin-top: 20px;
+      font-size: 20px;
+      font-weight: bold;
+      text-shadow: 0 0 5px #000;
     }
 
     .done {
-        color: #00ff00;
-        margin-top: 30px;
-        font-size: 22px;
+      color: #00ff00;
     }
 
-    .steps {
-        display: none;
-        margin-top: 20px;
-        background: rgba(255,255,255,0.05);
-        border-radius: 10px;
-        padding: 15px;
+    .error {
+      color: #ff4d4d;
     }
-
-    .steps ol {
-        padding-right: 20px;
-        text-align: right;
-    }
-
-    .steps li {
-        margin-bottom: 10px;
-    }
-</style>
+  </style>
 </head>
 <body>
-<div class="container">
-    <h1>PSFree 9.00</h1>
-    <h2>تثبيت التخزين المؤقت بدون فلاش USB</h2>
+  <h1>تثبيت التخزين المؤقت لصفحة PSFree</h1>
+  <div class="progress-bar">
+    <div class="progress-fill" id="fill"></div>
+  </div>
+  <div class="status" id="status">جاري تحميل الملفات...</div>
 
-    <div class="progress-bar">
-        <div class="progress-fill" id="bar"></div>
-    </div>
-    <div id="status">جاري تحميل الملفات...</div>
+  <script>
+    function updateProgress(e) {
+      if (e.lengthComputable) {
+        var percent = Math.round((e.loaded / e.total) * 100);
+        document.getElementById("fill").style.width = percent + "%";
+        document.getElementById("status").textContent = "جارٍ التثبيت... " + percent + "%";
+      }
+    }
 
-    <div class="done" id="done" style="display:none;">تم التثبيت بنجاح!</div>
-    
-    <div class="steps" id="steps">
-        <h3>التشغيل في وضع عدم الاتصال:</h3>
-        <ol>
-            <li>أغلق المتصفح تمامًا من زر الرجوع</li>
-            <li>افصل الإنترنت (اختياري)</li>
-            <li>افتح المتصفح من جديد</li>
-            <li>سيتم تفعيل GoldHEN تلقائيًا</li>
-        </ol>
-    </div>
-</div>
+    function done() {
+      document.getElementById("fill").style.width = "100%";
+      document.getElementById("status").textContent = "تم التثبيت بنجاح. يمكنك الآن استخدام الصفحة بدون إنترنت.";
+      document.getElementById("status").className = "status done";
+    }
 
-<script>
-history.replaceState(null, null, 'cache.html');
+    function fail() {
+      document.getElementById("status").textContent = "حدث خطأ أثناء التثبيت. تأكد من اتصال الإنترنت.";
+      document.getElementById("status").className = "status error";
+    }
 
-function updateBar(e) {
-    var percent = Math.round(e.loaded / e.total * 100);
-    document.getElementById("bar").style.width = percent + "%";
-    document.getElementById("status").innerHTML = "جارٍ التثبيت: " + percent + "%";
-}
-
-function finishCache() {
-    document.getElementById("bar").style.width = "100%";
-    document.getElementById("status").style.display = "none";
-    document.getElementById("done").style.display = "block";
-    document.getElementById("steps").style.display = "block";
-}
-
-function cacheError() {
-    document.getElementById("status").innerHTML = "حدث خطأ أثناء التثبيت. أعد المحاولة.";
-    document.getElementById("bar").style.backgroundColor = "#ff0000";
-}
-
-window.applicationCache.addEventListener("progress", updateBar, false);
-window.applicationCache.oncached = finishCache;
-window.applicationCache.onupdateready = finishCache;
-window.applicationCache.onerror = cacheError;
-</script>
+    window.applicationCache.addEventListener("progress", updateProgress, false);
+    window.applicationCache.addEventListener("cached", done, false);
+    window.applicationCache.addEventListener("updateready", done, false);
+    window.applicationCache.addEventListener("error", fail, false);
+  </script>
 </body>
 </html>
