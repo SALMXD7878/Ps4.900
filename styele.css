@@ -1,0 +1,34 @@
+/* style.css */
+body {
+    margin: 0;
+    padding: 0;
+    background-image: url('2C72DACC-C518-4BF2-89CA-C677E2F086CA.jpeg');
+    background-size: cover;
+    background-position: center;
+    font-family: 'Arial', sans-serif;
+    direction: rtl;
+    color: white;
+    text-align: center;
+}
+
+#overlay {
+    background-color: rgba(0, 0, 0, 0.7);
+    min-height: 100vh;
+    padding-top: 50px;
+}
+
+.title {
+    font-size: 36px;
+    color: yellow;
+}
+
+.name {
+    font-size: 28px;
+    color: red;
+}
+
+.footer {
+    font-size: 24px;
+    color: orange;
+    margin-top: 20px;
+}
