@@ -1,85 +1,44 @@
 <!DOCTYPE html>
 <html manifest="cache.manifest" lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <title>تثبيت التخزين المؤقت - PSFree</title>
-  <link rel="stylesheet" href="style.css">
-  <style>
-    body {
-      background: url('img.jpg') no-repeat center center fixed;
-      background-size: cover;
-      color: white;
-      font-family: sans-serif;
-      text-align: center;
-      padding: 20px;
-      direction: rtl;
-    }
-
-    .progress-bar {
-      width: 100%;
-      max-width: 600px;
-      height: 25px;
-      margin: 30px auto;
-      background-color: rgba(255,255,255,0.1);
-      border-radius: 15px;
-      overflow: hidden;
-      border: 1px solid rgba(255,255,255,0.2);
-    }
-
-    .progress-fill {
-      height: 100%;
-      width: 0%;
-      background: linear-gradient(90deg, #00a8ff, #00ff00);
-      transition: width 0.5s ease;
-    }
-
-    .status {
-      margin-top: 20px;
-      font-size: 20px;
-      font-weight: bold;
-      text-shadow: 0 0 5px #000;
-    }
-
-    .done {
-      color: #00ff00;
-    }
-
-    .error {
-      color: #ff4d4d;
-    }
-  </style>
+<meta charset="UTF-8">
+<title>تثبيت التخزين المؤقت | PSFree-Lapse</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>تثبيت التخزين المؤقت لصفحة PSFree</h1>
-  <div class="progress-bar">
-    <div class="progress-fill" id="fill"></div>
-  </div>
-  <div class="status" id="status">جاري تحميل الملفات...</div>
+<script>
+history.replaceState(null,null,'index.html');
+var histlength = history.length;
+history.go(-histlength);
 
-  <script>
-    function updateProgress(e) {
-      if (e.lengthComputable) {
-        var percent = Math.round((e.loaded / e.total) * 100);
-        document.getElementById("fill").style.width = percent + "%";
-        document.getElementById("status").textContent = "جارٍ التثبيت... " + percent + "%";
-      }
-    }
+function DLProgress(e){
+  var percent = Math.round(e.loaded / e.total * 100);
+  setTimeout(function(){
+    document.getElementById("msgs").textContent = "جاري بدء تثبيت التخزين المؤقت، يرجى الانتظار " + percent + "%";
+  }, 500);
+}
 
-    function done() {
-      document.getElementById("fill").style.width = "100%";
-      document.getElementById("status").textContent = "تم التثبيت بنجاح. يمكنك الآن استخدام الصفحة بدون إنترنت.";
-      document.getElementById("status").className = "status done";
-    }
+function DisplayCacheProgress(){
+  setTimeout(function(){
+    document.getElementById("msgs").textContent = "تم تثبيت التخزين المؤقت بنجاح ✔";
+  }, 1500);
+  setTimeout(function(){
+    document.getElementById("msgs").textContent = "الآن أغلق المتصفح وافتحه مرة أخرى.";
+  }, 3500);
+}
 
-    function fail() {
-      document.getElementById("status").textContent = "حدث خطأ أثناء التثبيت. تأكد من اتصال الإنترنت.";
-      document.getElementById("status").className = "status error";
-    }
+if (window.applicationCache) {
+  window.applicationCache.addEventListener("progress", DLProgress, false);
+  window.applicationCache.oncached = DisplayCacheProgress;
+  window.applicationCache.onupdateready = DisplayCacheProgress;
+}
+</script>
 
-    window.applicationCache.addEventListener("progress", updateProgress, false);
-    window.applicationCache.addEventListener("cached", done, false);
-    window.applicationCache.addEventListener("updateready", done, false);
-    window.applicationCache.addEventListener("error", fail, false);
-  </script>
+<h1>مرحباً بك في نسخة PSFree-Lapse الجديدة</h1>
+<hr>
+<br>
+<h1 id="msgs" style="font-size: 30px; margin-top: 80px; margin-bottom: 460px;">
+  جاري بدء التخزين المؤقت...
+</h1>
 </body>
 </html>
