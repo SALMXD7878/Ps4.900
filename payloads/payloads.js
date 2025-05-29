@@ -131,7 +131,7 @@ export function load_DisableASLR(){
     Loadpayloadlocal("./payloads/Bins/Tools/disableaslr.bin");
 }
 
-export function load_ايقاف_التحديثات  (){
+export function load_DisableUpdates(){
     Loadpayloadlocal("./payloads/Bins/Tools/disableupdates.bin");
 }
 
