@@ -1,12 +1,10 @@
 CACHE MANIFEST
 # v1
-# Generated on 2025-06-02 15:34:46.472170
+# Generated on 2025-06-07 13:15:37.458658
 
 CACHE:
 index.html
 css/index.css
-fonts/FONTS.LICENSE
-fonts/LiberationMono-Regular.ttf
 js/index.js
 payloads/Jailbreak.js
 payloads/payloads.js
@@ -34,6 +32,7 @@ payloads/Bins/RDR2/OystersMenu-1.19-FREE.bin
 payloads/Bins/RDR2/OystersMenu-1.24-FREE.bin
 payloads/Bins/RDR2/OystersMenu-1.29-FREE.bin
 payloads/Bins/Tools/app2usb.bin
+payloads/Bins/Tools/appcache-install.bin
 payloads/Bins/Tools/backupdb.bin
 payloads/Bins/Tools/disableaslr.bin
 payloads/Bins/Tools/disableupdates.bin
@@ -62,9 +61,25 @@ psfree/config.mjs
 psfree/lapse.mjs
 psfree/psfree.mjs
 psfree/send.mjs
-psfree/kpatch/900.elf
+psfree/fonts/FONTS.LICENSE
+psfree/fonts/LiberationMono-Regular.ttf
+psfree/kpatch/700.bin
+psfree/kpatch/750.bin
+psfree/kpatch/800.bin
+psfree/kpatch/850.bin
+psfree/kpatch/900.bin
+psfree/kpatch/903.bin
+psfree/kpatch/950.bin
+psfree/lapse/ps4/700.mjs
+psfree/lapse/ps4/750.mjs
+psfree/lapse/ps4/751.mjs
+psfree/lapse/ps4/800.mjs
+psfree/lapse/ps4/850.mjs
+psfree/lapse/ps4/852.mjs
+psfree/lapse/ps4/900.mjs
+psfree/lapse/ps4/903.mjs
+psfree/lapse/ps4/950.mjs
 psfree/module/chain.mjs
-psfree/module/constants.mjs
 psfree/module/int64.mjs
 psfree/module/mem.mjs
 psfree/module/memtools.mjs
@@ -72,7 +87,12 @@ psfree/module/offset.mjs
 psfree/module/rw.mjs
 psfree/module/utils.mjs
 psfree/module/view.mjs
-psfree/rop/900.mjs
+psfree/rop/ps4/700.mjs
+psfree/rop/ps4/750.mjs
+psfree/rop/ps4/800.mjs
+psfree/rop/ps4/850.mjs
+psfree/rop/ps4/900.mjs
+psfree/rop/ps4/950.mjs
 
 NETWORK:
 *
