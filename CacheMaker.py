@@ -7,7 +7,7 @@ EXCLUDED_EXTENSIONS = {
     '.bat', '.txt', '.exe', '.mp4', '.py', '.bak', '.zip',
     '.mp3', '.sh', '.h', '.c', '.o', '.ld', '.md', '.d'
 }
-EXCLUDED_FILES = {'.gitignore', 'COPYING', 'LICENSE', 'MAKEFILE', 'dockerfile'}
+EXCLUDED_FILES = {'.gitignore', 'COPYING', 'LICENSE', 'MAKEFILE', 'dockerfile', '.gitinclude'}
 OUTPUT_FILE = 'PSFree.manifest'
 
 def create_manifest():
