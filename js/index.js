@@ -1,6 +1,8 @@
 const ckbaj = document.getElementById('ckbaj');
+const ckbdc = document.getElementById('ckbdc');
 const visibleDiv = localStorage.getItem('visibleDiv') || 'jailbreak-page';
 const savedaj = localStorage.getItem('autojbstate');
+const savedc = localStorage.getItem('dbugc');
 const menuBtns = document.querySelectorAll('.menu-btn');
 const psBtns = document.querySelectorAll('.ps-btn');
 const plsbtn = document.querySelectorAll('.button-container button');
@@ -45,9 +47,19 @@ document.getElementById('update-exploit').addEventListener('click', () => {
 });
 
 ckbaj.addEventListener('change', (e) => {
-  alert("WARNING :\nThis option make the jailbreak unstable and this option is not recommended please use the jailbreak button instead !")
+  //alert("WARNING :\nThis option make the jailbreak unstable and this option is not recommended please use the jailbreak button instead !");
   localStorage.setItem('autojbstate', e.target.checked);
   onCheckboxChange(e.target.checked);
+});
+
+ckbdc.addEventListener('change', (e) => {
+  localStorage.setItem('dbugc', e.target.checked);
+  onCheckboxChange(e.target.checked);
+  if (ckbdc.checked) {
+    document.getElementById('DebugConsole').style.display  = 'flex';
+  } else {
+    document.getElementById('DebugConsole').style.display = 'none';
+  }
 });
 
 function isHttps() {
@@ -66,7 +78,7 @@ async function loadMultipleModules(files) {
 }
 
 function showabout() {
-  document.getElementById('about-popup').style.display = 'block'; // Show popup
+  document.getElementById('about-popup').style.display = 'flex'; // Show popup
   document.getElementById('overlay-popup').style.display = 'block'; // Show overlay
 }
 
@@ -76,7 +88,7 @@ function closeabout() {
 }
 
 function showsettings() {
-  document.getElementById('settings-popup').style.display = 'block'; // Show popup
+  document.getElementById('settings-popup').style.display = 'flex'; // Show popup
   document.getElementById('overlay-popup').style.display = 'block'; // Show overlay
 }
 
@@ -97,17 +109,9 @@ function CheckFW() {
     const firmwareMatch = userAgent.match(/PlayStation 4\/([\d.]+)/);
     const fwVersion = firmwareMatch ? firmwareMatch[1] : null;
 
-    if (fwVersion === '9.00') {
+    if (fwVersion === '7.00' || fwVersion === '7.01' || fwVersion === '7.02' || fwVersion === '7.50' || fwVersion === '7.51' || fwVersion === '7.55' || fwVersion === fwVersion === '8.00' || fwVersion === '8.01' || fwVersion === '8.01' || fwVersion === '8.03' || fwVersion === '8.50' || fwVersion === '8.52' || fwVersion === '9.00' || fwVersion === '9.03' || fwVersion === '9.04' || fwVersion === '9.50' || fwVersion === '9.51' || fwVersion === '9.60') {
       document.getElementById('PS4FW').textContent = `PS4 FW: ${fwVersion} | Compatible`;
       document.getElementById('PS4FW').style.color = 'green';
-    } else if (fwVersion === '9.03' || fwVersion === '9.60') {
-      document.getElementById('PS4FW').textContent = `PS4 FW: ${fwVersion} | SOON !`;
-      document.getElementById('PS4FW').style.color = 'orange';
-
-      elementsToHide.forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.style.display = 'none';
-      });
     } else {
       document.getElementById('PS4FW').textContent = `PS4 FW: ${fwVersion || 'Unknown'} | Incompatible`;
       document.getElementById('PS4FW').style.color = 'red';
@@ -117,6 +121,8 @@ function CheckFW() {
         if (el) el.style.display = 'none';
       });
     }
+
+    document.title = "PSFree | " + fwVersion
   } else {
     let platform = 'Unknown platform';
 
@@ -288,14 +294,28 @@ function loadajbsettings(){
     ckbaj.checked = savedaj === 'true';
     onCheckboxChange(ckbaj.checked);
   }
+
+  if (savedc !== null){
+    ckbdc.checked = savedc === 'true';
+    onCheckboxChange(ckbdc.checked);
+  }
+
   if (ckbaj.checked) {
     if (sessionStorage.getItem('jbsuccess')) {
       console.log('Aleardy jailbroken !');
     } else {
+      document.getElementById('jailbreak').style.display = 'none';
+      document.getElementById('loader').style.display = 'flex';
       setTimeout(() => {
         jailbreak();
       }, 3000);
     }
+  }
+
+  if (ckbdc.checked) {
+    document.getElementById('DebugConsole').style.display  = 'flex';
+  } else {
+    document.getElementById('DebugConsole').style.display = 'none';
   }
 
   if (isHttps()) {
@@ -321,6 +341,8 @@ function loadajbsettings(){
 
 async function jailbreak() {
   try {
+    document.getElementById('jailbreak').style.display = 'none';
+    document.getElementById('loader').style.display = 'flex';
     const modules = await loadMultipleModules([
       '../payloads/Jailbreak.js',
       '../psfree/alert.mjs'
@@ -356,7 +378,6 @@ async function binloader() {
   try {
     sessionStorage.setItem('binloader', 1);
     const modules = await loadMultipleModules([
-      '../payloads/Jailbreak.js',
       '../psfree/alert.mjs'
     ]);
     console.log("All modules are loaded!");
