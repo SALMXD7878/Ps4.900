@@ -224,7 +224,7 @@ console.print(Panel(Text("Simple Python HTTP Server", style="bold white on blue"
 
 console.print(
     f"[green]Server is running![/]\n"
-    f"Listening on [bold magenta]http://{IP}:{PORT}/PSFree[/]\n",
+    f"Listening on [bold magenta]http://{IP}:{PORT}[/]\n",
     style="bold",
 )
 
