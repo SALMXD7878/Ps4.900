@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>مولّد JSON للغش</title>
+<style>
+body {background-color:#0f1113;color:#e6eef3;font-family:"Cairo",sans-serif;text-align:center;direction:rtl;padding:20px;}
+h1{color:#00eaff;margin-bottom:8px;}
+.box{background:#0b0d0f;border:1px solid #222;padding:12px;border-radius:10px;margin:12px auto;max-width:900px;text-align:right;}
+input,button{margin:6px 6px 6px 0;padding:8px;border-radius:8px;border:1px solid #222;outline:none;font-size:15px;background:#111315;color:#e6eef3;}
+input::placeholder{color:#888;}
+button{background-color:#00eaff;color:#001216;cursor:pointer;border:none;}
+button:disabled{opacity:0.5;cursor:default;}
+.mods{margin-top:10px;display:flex;flex-direction:column;gap:10px;align-items:stretch;}
+.offset-block{background:#0b0d0f;border:1px solid #222;padding:10px;border-radius:8px;margin-top:8px;text-align:right;}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+pre{background-color:#071015;padding:12px;border-radius:8px;text-align:left;direction:ltr;white-space:pre-wrap;word-break:break-word;margin-top:14px;max-height:320px;overflow:auto;border:1px solid #162022;}
+.small{font-size:13px;color:#89a;}
+</style>
+</head>
+<body>
+<h1>🔧 مولّد JSON للغش</h1>
+
+<div class="box">
+<div>
+<label>اسم اللعبة:</label><br>
+<input id="gameName" type="text" placeholder="مثال: Black Ops III" />
+</div>
+
+<div style="margin-top:8px;">
+<label>الإصدار (version):</label><br>
+<input id="version" type="text" placeholder="مثال: 01.33" />
+</div>
+
+<div style="margin-top:8px;">
+<label>رمز CUSA (اختياري):</label><br>
+<input id="cusa" type="text" placeholder="مثال: CUSA00419" />
+</div>
+
+<p class="small" style="margin-top:10px;">📦 ملف العملية (ثابت): <b>eboot.bin</b></p>
+
+<div style="margin-top:6px;">
+<button id="addModBtn">➕ إنشاء غش جديد</button>
+<button id="generateBtn">📄 توليد JSON</button>
+<button id="downloadBtn" disabled>⬇️ تحميل الملف</button>
+</div>
+
+<div class="mods" id="modsContainer"></div>
+<pre id="output">{ }</pre>
+</div>
+
+<script>
+const mods = [];
+
+function hexTrim(s){if(!s) return ''; s=String(s).trim(); if(s.startsWith('0x')||s.startsWith('0X')) s=s.slice(2); return s.replace(/[^0-9A-Fa-f]/g,'').toUpperCase();}
+function toHex(n){return n.toString(16).toUpperCase();}
+
+function renderMods(){
+  const root=document.getElementById('modsContainer');
+  root.innerHTML='';
+  mods.forEach((mod,i)=>{
+    const box=document.createElement('div'); box.className='box';
+    box.innerHTML=`
+      <div class="row" style="justify-content:space-between;">
+        <input type="text" placeholder="🧩 اسم الغش" value="${mod.name||''}" oninput="mods[${i}].name=this.value">
+        <div>
+          <button onclick="addOffset(${i})">➕ إضافة Offset</button>
+          <button onclick="removeMod(${i})" style="background:#ff7b7b;">🗑️ حذف الغش</button>
+        </div>
+      </div>
+      <div id="offsets-${i}"></div>
+    `;
+    root.appendChild(box);
+    mod.memory.forEach((mem,j)=>{
+      const el=document.createElement('div');
+      el.className='offset-block';
+      el.innerHTML=`
+        <div class="small">Offset: ${mem.offset}</div>
+        <div class="small">ON: ${mem.on}</div>
+        <div class="small">OFF: ${mem.off}</div>
+        <button onclick="removeOffset(${i},${j})" style="background:#ff7b7b;">حذف</button>
+      `;
+      box.querySelector(`#offsets-${i}`).appendChild(el);
+    });
+  });
+}
+
+function addMod(){
+  mods.push({name:'',type:'checkbox',memory:[]});
+  const index = mods.length-1;
+  renderMods();
+  setTimeout(()=>addOffset(index), 0); // نفتح offset مباشرة للغش الجديد
+}
+
+function removeMod(i){if(confirm('حذف الغش؟')){mods.splice(i,1);renderMods();}}
+
+function addOffset(modIndex=-1){
+  if(modIndex<0) modIndex=mods.length-1;
+  if(modIndex<0) return alert('لا يوجد غش لإنشاء offset فيه');
+
+  const container=document.querySelector(`#offsets-${modIndex}`);
+  if(!container) return;
+
+  const box=document.createElement('div'); box.className='offset-block';
+  box.innerHTML=`
+    <input placeholder="Offset (مثل 9A2F1F)" class="offset">
+    <input placeholder="قيمة ON" class="on">
+    <input placeholder="قيمة OFF" class="off"><br>
+    <button class="save">💾 حفظ</button>
+    <button class="cont">➡️ استمرار</button>
+    <button class="newMod" style="background:#007bff;">✨ صنع غش جديد</button>
+    <button class="cancel" style="background:#ff7b7b;">إلغاء</button>
+  `;
+  container.appendChild(box);
+
+  const save=box.querySelector('.save');
+  const cont=box.querySelector('.cont');
+  const cancel=box.querySelector('.cancel');
+  const newMod=box.querySelector('.newMod');
+
+  function saveOffset(next=false, createNew=false){
+    const raw=hexTrim(box.querySelector('.offset').value);
+    if(!raw) return alert('أدخل offset');
+    const addrNum=parseInt(raw,16);
+    if(Number.isNaN(addrNum)) return alert('العنوان غير صحيح');
+    const calc=addrNum-0x400000;
+    const offHex=(calc<0?'-':'')+toHex(Math.abs(calc));
+    const onVal=box.querySelector('.on').value.trim();
+    const offVal=box.querySelector('.off').value.trim();
+    mods[modIndex].memory.push({offset:offHex,on:onVal,off:offVal});
+    renderMods();
+    if(next) addOffset(modIndex);
+    if(createNew){ setTimeout(()=>addMod(),50); }
+  }
+
+  save.onclick=()=>saveOffset(false,false);
+  cont.onclick=()=>saveOffset(true,false);
+  newMod.onclick=()=>saveOffset(false,true);
+  cancel.onclick=()=>box.remove();
+}
+
+function removeOffset(m,i){mods[m].memory.splice(i,1);renderMods();}
+
+function generateJSON(){
+  const data={
+    name:document.getElementById('gameName').value.trim(),
+    id:document.getElementById('cusa').value.trim(),
+    version:document.getElementById('version').value.trim(),
+    process:"eboot.bin",
+    mods:mods,
+    credits:["سالم الحارثي"]
+  };
+  const json=JSON.stringify(data,null,2);
+  document.getElementById('output').textContent=json;
+
+  const blob=new Blob([json],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const dl=document.getElementById('downloadBtn');
+  dl.disabled=false;
+  dl.onclick=()=>{
+    const cusa=document.getElementById('cusa').value.trim() || "game";
+    const version=document.getElementById('version').value.trim() || "v1";
+    const fileName=`${cusa}_${version}.json`;
+    const a=document.createElement('a');
+    a.href=url;
+    a.download=fileName;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+  };
+}
+
+document.getElementById('addModBtn').onclick=addMod;
+document.getElementById('generateBtn').onclick=generateJSON;
+
+addMod(); // نبدأ بغش واحد جاهز
+</script>
+</body>
+</html>
